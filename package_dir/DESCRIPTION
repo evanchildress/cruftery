@@ -1,0 +1,9 @@
+Package: cruftery
+Type: Package
+Title: Miscallaneous functions.
+Version: 1.0
+Date: 2014-07-16
+Author: Krzysztof Sakrejda
+Maintainer: Krzysztof Sakrejda <krzysztof.sakrejda@gmail.com>
+Description: Miscallaneous stuff.
+License: GPL-2
