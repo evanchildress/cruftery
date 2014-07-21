@@ -61,6 +61,21 @@ date_to_biweek <- date_to_subyear_interval_factory(
   map = no_leap_year, leap_year_map = leap_year)
 
 
+batchify <- function(date, breaks) {
+  if (length(date) == 0) stop("Pass at least one date to 'batchify'.")
+  if (length(date) > 1) 
+    sapply(date, batchify, breaks=breaks)
+  else {
+    batch <- which(date > breaks)
+    if (length(batch) >= 1)
+      return(max(batch))
+    else if (identical(batch, vector(mode='integer',length=0)))
+      return(0)
+    else 
+      stop("Something is really rotten in Denmark.")
+  }
+}
+
 
 
 
