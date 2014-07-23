@@ -84,3 +84,4 @@ db_connector <- setRefClass(Class="db_connector",
                                     }
                             )
 )
+
