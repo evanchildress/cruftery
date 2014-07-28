@@ -108,9 +108,9 @@ joint_old_new_cases <- function(new_counts, old_counts) {
 }
 	
 ## Example: 
-new_counts <- import_case_counts(link=link)
-old_counts <- import_old_case_counts(link=link)
-counts <- joint_old_new_cases(new_counts, old_counts)
+#new_counts <- import_case_counts(link=link)
+#old_counts <- import_old_case_counts(link=link)
+#counts <- joint_old_new_cases(new_counts, old_counts)
 
 
 
