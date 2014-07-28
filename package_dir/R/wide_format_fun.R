@@ -2,8 +2,7 @@
 
 create_standard_wide_format <- function(
 	case_counts, keep_codes = c('26','27','66'),
-	path_to_census = '2010Census.csv',
-	path_to_output = 'standard-wide-format.RData'
+	path_to_census = '2010Census.csv'
 ) {
 	case_counts <- case_counts[case_counts[['disease']] %in% keep_codes,]
 	case_counts[['disease']] <- NULL   ## Standard format has no notion of count by disease type.
@@ -45,7 +44,6 @@ create_standard_wide_format <- function(
 	# Matrix: 'year','time.in.year','time'
 	time_matrix <- as.matrix(data.frame(year=year, time.in.year=biweek, time=time))
 	
-	save(province_names, code, fips, pop, count_matrix, time_matrix, file=path_to_output)
 	return(list(
 		province_names = province_names,
 		code = code,
@@ -57,5 +55,6 @@ create_standard_wide_format <- function(
 }
 	
 
+#	save(province_names, code, fips, pop, count_matrix, time_matrix, file=path_to_output)
 
 
