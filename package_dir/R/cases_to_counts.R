@@ -4,7 +4,7 @@ build_aggregate_stmt <- function(
 	group_by,
 	from_timepoint,
 	to_timepoint,
-	delivery_timepoint,
+	delivery_timepoint
 ) {
 	stmt <- paste0(
 		"SELECT ", paste0(group_by, collapse=', '), ", count(*) FROM ",
