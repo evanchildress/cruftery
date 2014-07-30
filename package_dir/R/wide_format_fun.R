@@ -6,8 +6,11 @@ create_standard_wide_format <- function(
 ) {
 	case_counts <- case_counts[case_counts[['disease']] %in% keep_codes,]
 	case_counts[['disease']] <- NULL   ## Standard format has no notion of count by disease type.
-	count_melt <- melt(data=counts, id.vars=c('province','date_sick_year','date_sick_biweek'))
-	standard_count_format <- dcast(data=count_melt, formula=province ~ date_sick_year + date_sick_biweek )
+        count_melt <- melt(data=counts, 
+                           id.vars=c('province','date_sick_year','date_sick_biweek'), 
+                           measure.vars='count')
+        standard_count_format <- dcast(data=count_melt, formula=province ~ date_sick_year + date_sick_biweek,
+                                       fun.aggregate=sum)
 	standard_count_format <- standard_count_format[order(standard_count_format[['province']]),]
 	
 	## Extra data
