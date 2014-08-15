@@ -27,8 +27,8 @@ fetch_cases <- function(link, stmt) {
 aggregate_to_formula <- function(
 	counts, formula,
 	label_function = function(x) {
-		counts[['date_sick_biweek']] <- date_to_biweek(counts[['date_sick']])
-		return(counts)
+		x[['date_sick_biweek']] <- date_to_biweek(x[['date_sick']])
+		return(x)
 	}
 ) {
 	counts[['date_sick_year']] <- year(counts[['date_sick']])
