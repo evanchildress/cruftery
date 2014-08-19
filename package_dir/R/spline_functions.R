@@ -1,3 +1,5 @@
+
+## @knitr generic-radial-spline
 # Generic radial spline:
 radial_spline <- function(x, f, knot_points, knot_weights, knot_scale) {
   if (length(x) == 1) {
@@ -8,14 +10,16 @@ radial_spline <- function(x, f, knot_points, knot_weights, knot_scale) {
   }
 }
 
+## @knitr gaussian-radial-spline
 # Generic radial spline specialized to Gaussian.
 gaussian_spline <- function(x, knot_points, knot_weights, knot_scale) {
   f <- function(x, center, scale) dnorm(x=x, mean=center, sd=scale)
   return(radial_spline(x=x, f=f, knot_points=knot_points, knot_weights=knot_weights, knot_scale=knot_scale))
 }
 
-# Integral of Gaussian radial spline.
 
+## @knitr gaussian-spline-integral
+# Integral of Gaussian radial spline.
 gaussian_spline_integral <- function(knot_points, knot_weights, knot_scale, a, b) {
   contributions <- mapply(
     FUN=function(point, weight, scale, a, b) {
