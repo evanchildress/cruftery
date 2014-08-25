@@ -31,9 +31,21 @@ gaussian_spline_integral <- function(knot_points, knot_weights, knot_scale, a, b
   return(sum(contributions))
 }
 
+## @knitr circular-normal function for spline, only k=-1,0,1
+# Circular normal.
+circular_normal_density <- function(x, center, scale) {
+  o <- 1/(scale*(2*pi)^2) * (
+ 		exp(-(x-center-2*pi)^2/(2*scale^2)) +
+    exp(-(x-center     )^2/(2*scale^2)) +
+    exp(-(x-center+2*pi)^2/(2*scale^2))
+  )
+}
 
-
-
+circular_spline <- function(x, knot_points, knot_weights, knot_scale) {
+	f <- circular_normal_density
+  return(radial_spline(x=x, f=f, knot_points=knot_points, knot_weights=knot_weights, knot_scale=knot_scale))
+}
+	
 
 
 
