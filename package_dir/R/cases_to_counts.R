@@ -50,9 +50,12 @@ import_case_counts <- function(
 ) {
 	stmt <- build_aggregate_stmt(source_table, group_by, from_timepoint, to_timepoint, delivery_timepoint)
 	case_counts <- fetch_cases(link, stmt)
-	if(!is.null(aggregate_formula))
+	if(!is.null(aggregate_formula)) {
 		agg_case_counts <- aggregate_to_formula(counts=case_counts, formula=aggregate_formula)
-	return(agg_case_counts)
+		return(agg_case_counts)
+	} else {
+		return(case_counts)
+	}
 }
 
 import_old_case_counts <- function(
