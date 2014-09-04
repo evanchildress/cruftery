@@ -28,7 +28,7 @@ create_standard_wide_format <- function(
 	split_time <- strsplit(x=colnames(counts)[5:ncol(counts)], split='_')
 	year <- sapply(split_time, function(x) as.numeric(x[1]))
 	biweek <- sapply(split_time, function(x) as.numeric(x[2]))
-	time <- year + biweek/26
+	time <- year + (biweek-1)/26
 	
 	## For colanmes
 	biweek_string <- formatC(x=biweek, width=2, flag="0")
