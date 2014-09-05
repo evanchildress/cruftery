@@ -9,9 +9,9 @@ build_aggregate_stmt <- function(
 	stmt <- paste0(
 		"SELECT ", paste0(group_by, collapse=', '), ", count(*) FROM ",
 		source_table, " WHERE ",
-			"date_sick >  '", as.character(from_timepoint), "' AND ",
-			"date_sick <= '", as.character(to_timepoint), "' AND ",
-			"(delivery_date < '", as.character(delivery_timepoint), "' ",
+			"NOT date_sick < '", as.character(from_timepoint), "' AND ",
+			"    date_sick < '", as.character(to_timepoint), "' AND ",
+			"(delivery_date <= '", as.character(delivery_timepoint), "' ",
 			" OR delivery_date IS NULL) ",
 		"GROUP BY ", paste0(group_by, collapse=', '), " ",
 		"ORDER BY ", paste0(group_by, collapse=', '), ";"
