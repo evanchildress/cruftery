@@ -8,6 +8,7 @@
 
 make_country_prediction_line_graph <- function(forecasts, counts) {
                 require(dplyr)
+                require(lubridate)
                 forecasts <- tbl_df(forecasts)
                 counts <- tbl_df(counts)
         
