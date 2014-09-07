@@ -11,13 +11,7 @@ make_country_prediction_line_graph <- function(forecasts, counts) {
                 require(lubridate)
                 forecasts <- tbl_df(forecasts)
                 counts <- tbl_df(counts)
-        
-                ## move counts to biweeks
-                counts$biweek <- date_to_biweek(as.Date(counts$date_sick))
-                counts$biweek[which(is.na(counts$biweek))] <- 26
-                counts$biweek_day <- biweek_to_date(counts$biweek, year(counts$date_sick))
-                counts$year <- year(counts$date_sick)
-                
+                        
                 ## aggregate to country-level
                 forecasts_cntry <- forecasts %>% group_by(biweek, year) %>% 
                         summarize(predicted_cntry_count = sum(predicted_count),
@@ -26,9 +20,10 @@ make_country_prediction_line_graph <- function(forecasts, counts) {
                         mutate(time = year + (biweek-1)/26)
                 forecast_times <- (forecasts_cntry$year + (forecasts_cntry$biweek-1)/26)
                 
-                counts_cntry <- counts %>% group_by(year, biweek) %>%
+                counts_cntry <- counts %>% 
+                        group_by(date_sick_year, date_sick_biweek) %>%
                         summarize(cntry_count = sum(count)) %>%
-                        mutate(time = year + (biweek-1)/26,
+                        mutate(time = date_sick_year + (date_sick_biweek-1)/26,
                                forecast_biweek = time %in% forecast_times)
                 
 
