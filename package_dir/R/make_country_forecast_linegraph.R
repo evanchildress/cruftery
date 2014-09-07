@@ -6,10 +6,10 @@
 #'@param counts_file file containing counts
 #'
 
-make_country_prediction_line_graph <- function(forecast_file, counts_file) {
+make_country_prediction_line_graph <- function(forecasts, counts) {
                 require(dplyr)
-                forecasts <- tbl_df(read.csv(forecast_file))
-                counts <- tbl_df(read.csv(counts_file))
+                forecasts <- tbl_df(forecasts)
+                counts <- tbl_df(counts)
         
                 ## move counts to biweeks
                 counts$biweek <- date_to_biweek(as.Date(counts$date_sick))
