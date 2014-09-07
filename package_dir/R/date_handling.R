@@ -26,16 +26,15 @@ date_to_subyear_interval_factory <- function(map, leap_year_map=map) {
 
   # Function def:
   date_to_subyear_interval <- function(date) {
-    if (is.na(date)) return(NA)
-    if (!require(lubridate)) stop("Need to install 'lubridate' package.")
-    day <- yday(date)
-    if (is.na(day)) stop(paste("Date is invalid: ", date, "\n", sep=''))
-    if (leap_year(date)) {
-      return(leap_year_map[day,'biweek'])
-    } else {
-      return(regular_year_map[day,'biweek'])
-    }
-    stop("Something is rotten in Denmark.")
+		lyi  <- sapply( leap_year(date), isTRUE)
+		nlyi <- sapply(!leap_year(date), isTRUE)
+		o <- vector(mode='numeric', length=length(date))
+		o[ is.na(date)] <- NA
+    o[!is.na(date)] <- yday(date[!is.na(date)])
+		o[lyi] <- leap_year_map[o[lyi],'biweek']
+		o[nlyi] <- regular_year_map[o[nlyi],'biweek']
+		if (any(o > 26 | o < 1)) stop()
+		return(o)
   }
 
   return(date_to_subyear_interval)

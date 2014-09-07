@@ -9,3 +9,6 @@
 .Rproj.user
 
 *.Rproj
+
+*.swo
+*.swp

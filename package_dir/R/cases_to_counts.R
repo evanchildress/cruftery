@@ -9,9 +9,9 @@ build_aggregate_stmt <- function(
 	stmt <- paste0(
 		"SELECT ", paste0(group_by, collapse=', '), ", count(*) FROM ",
 		source_table, " WHERE ",
-			"date_sick >  '", as.character(from_timepoint), "' AND ",
-			"date_sick <= '", as.character(to_timepoint), "' AND ",
-			"(delivery_date < '", as.character(delivery_timepoint), "' ",
+			"NOT date_sick < '", as.character(from_timepoint), "' AND ",
+			"    date_sick < '", as.character(to_timepoint), "' AND ",
+			"(delivery_date <= '", as.character(delivery_timepoint), "' ",
 			" OR delivery_date IS NULL) ",
 		"GROUP BY ", paste0(group_by, collapse=', '), " ",
 		"ORDER BY ", paste0(group_by, collapse=', '), ";"
@@ -27,8 +27,8 @@ fetch_cases <- function(link, stmt) {
 aggregate_to_formula <- function(
 	counts, formula,
 	label_function = function(x) {
-		counts[['date_sick_biweek']] <- date_to_biweek(counts[['date_sick']])
-		return(counts)
+		x[['date_sick_biweek']] <- date_to_biweek(x[['date_sick']])
+		return(x)
 	}
 ) {
 	counts[['date_sick_year']] <- year(counts[['date_sick']])
@@ -50,8 +50,12 @@ import_case_counts <- function(
 ) {
 	stmt <- build_aggregate_stmt(source_table, group_by, from_timepoint, to_timepoint, delivery_timepoint)
 	case_counts <- fetch_cases(link, stmt)
-	agg_case_counts <- aggregate_to_formula(counts=case_counts, formula=aggregate_formula)
-	return(agg_case_counts)
+	if(!is.null(aggregate_formula)) {
+		agg_case_counts <- aggregate_to_formula(counts=case_counts, formula=aggregate_formula)
+		return(agg_case_counts)
+	} else {
+		return(case_counts)
+	}
 }
 
 import_old_case_counts <- function(
