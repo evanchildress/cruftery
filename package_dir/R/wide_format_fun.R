@@ -1,9 +1,8 @@
 
 
-create_standard_wide_format <- function(
-	case_counts, keep_codes = c('26','27','66'),
-	path_to_census = '2010Census.csv'
-) {
+create_standard_wide_format <- function(case_counts, 
+                                        keep_codes = c('26','27','66'),
+                                        path_to_census = '2010Census.csv') {
 	case_counts <- case_counts[case_counts[['disease']] %in% keep_codes,]
 	case_counts[['disease']] <- NULL   ## Standard format has no notion of count by disease type.
         count_melt <- melt(data=case_counts, 
