@@ -6,7 +6,7 @@ create_standard_wide_format <- function(
 ) {
 	case_counts <- case_counts[case_counts[['disease']] %in% keep_codes,]
 	case_counts[['disease']] <- NULL   ## Standard format has no notion of count by disease type.
-        count_melt <- melt(data=counts, 
+        count_melt <- melt(data=case_counts, 
                            id.vars=c('province','date_sick_year','date_sick_biweek'), 
                            measure.vars='count')
        	## standardize 15 day biweek case counts (always biweek 26, biweek 5 in leap years)
