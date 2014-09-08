@@ -4,9 +4,13 @@
 
 #'@param forecast_data forecast file dataframe
 #'@param cdata cntry.data object with spatial polygons needed for plotting
+#'@param biweek biweek to plot
 
-plot_forecast_map <- function(forecast_data, cdata) {
+plot_forecast_map <- function(forecast_data, cdata, biweek) {
         require(ggplot2)
+        
+        if(!(biweek %in% unique(forecasts$biweek)))
+                stop("biweek must be in forecast_data.")
         
         ## retrieve location info
         thai.locs <- fortify(cdata@loc.info)
@@ -17,7 +21,7 @@ plot_forecast_map <- function(forecast_data, cdata) {
         ## required to have "region" as this column name!
         thai.locs$region <- loc.data[match(thai.locs$id, loc.data$ID_1), "FIPS_ADMIN"]
         
-        sp_map <- ggplot(subset(forecast_data, biweek=13), 
+        sp_map <- ggplot(subset(forecast_data, biweek=biweek), 
                aes(map_id=pid)) + 
                 geom_map(aes(fill=predicted_count), map=thai.locs) + 
                 expand_limits(x = thai.locs$long, y = thai.locs$lat) +
