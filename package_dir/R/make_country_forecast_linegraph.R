@@ -48,6 +48,6 @@ make_country_prediction_line_graph <- function(forecasts, counts) {
                                                               ymin=predicted_lb, ymax=predicted_ub), 
                                                               alpha=I(.1)) +
                         # air-brushing
-                        xlim(2013, 2015) + xlab(NULL) + ylab(NULL) + ylim(0, 20000) +
+                        xlim(2013, 2015) + xlab(NULL) + ylab(NULL) +
                         ggtitle("Observed and predicted DHF case counts for all of Thailand")
         }
