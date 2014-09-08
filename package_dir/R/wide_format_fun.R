@@ -1,14 +1,21 @@
 
 
-create_standard_wide_format <- function(
-	case_counts, keep_codes = c('26','27','66'),
-	path_to_census = '2010Census.csv'
-) {
+create_standard_wide_format <- function(case_counts, 
+                                        keep_codes = c('26','27','66'),
+                                        path_to_census = '2010Census.csv') {
 	case_counts <- case_counts[case_counts[['disease']] %in% keep_codes,]
 	case_counts[['disease']] <- NULL   ## Standard format has no notion of count by disease type.
-        count_melt <- melt(data=counts, 
+        count_melt <- melt(data=case_counts, 
                            id.vars=c('province','date_sick_year','date_sick_biweek'), 
                            measure.vars='count')
+       	## standardize 15 day biweek case counts (always biweek 26, biweek 5 in leap years)
+       	idx_bw_26 <- which(count_melt$date_sick_biweek==26)
+       	leap_years <- seq(1904, 2096, by=4)
+       	idx_bw_5 <- which(count_melt$date_sick_biweek==5 & count_melt$date_sick_year %in% leap_years)
+       	idx_to_adjust <- c(idx_bw_26, idx_bw_5)
+       	count_melt[idx_to_adjust, "value"] <- count_melt[idx_to_adjust, "value"]*14/15
+
+       	## make into wide format
         standard_count_format <- dcast(data=count_melt, formula=province ~ date_sick_year + date_sick_biweek,
                                        fun.aggregate=sum)
 	standard_count_format <- standard_count_format[order(standard_count_format[['province']]),]
@@ -28,7 +35,7 @@ create_standard_wide_format <- function(
 	split_time <- strsplit(x=colnames(counts)[5:ncol(counts)], split='_')
 	year <- sapply(split_time, function(x) as.numeric(x[1]))
 	biweek <- sapply(split_time, function(x) as.numeric(x[2]))
-	time <- year + biweek/26
+	time <- year + (biweek-1)/26
 	
 	## For colanmes
 	biweek_string <- formatC(x=biweek, width=2, flag="0")
