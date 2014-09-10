@@ -6,7 +6,7 @@
 #'@param counts_file file containing counts
 #'
 
-make_province_prediction_line_graph <- function(forecasts, counts, ylim_scale=1) {
+make_province_prediction_line_graph <- function(forecasts, counts) {
                 require(dplyr)
                 require(lubridate)
                 require(cruftery)
