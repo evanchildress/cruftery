@@ -17,6 +17,9 @@ make_province_prediction_line_graph <- function(forecasts, counts) {
                 forecasts <- tbl_df(forecasts)
                 counts <- tbl_df(counts)
                         
+                ## date plotting limits
+                min_plot_date <- as.Date('2013-01-01')
+                
                 ## aggregate to country-level
                 forecasts_prov <- forecasts %>% group_by(biweek, year, pid, pname) %>% 
                         summarize(predicted_prov_count = sum(predicted_count),
@@ -31,7 +34,8 @@ make_province_prediction_line_graph <- function(forecasts, counts) {
                         summarize(prov_count = sum(count)) %>%
                         mutate(time = date_sick_year + (date_sick_biweek-1)/26,
                                date_sick = biweek_to_date(date_sick_biweek, date_sick_year),
-                               forecast_biweek = time %in% forecast_times)
+                               forecast_biweek = time %in% forecast_times) %>%
+                        filter(date_sick >= min_plot_date)
                 
                 ## ready the province data
                 thai_prov_data <- mutate(thai_prov_data, 
@@ -59,11 +63,10 @@ make_province_prediction_line_graph <- function(forecasts, counts) {
                         geom_ribbon(data=forecasts_prov, aes(x=date_sick, 
                                                               ymin=predicted_lb, ymax=predicted_ub), 
                                                               alpha=I(.1)) +
-                        facet_wrap(~pid, scales="free_y") +
+                        facet_wrap(MOPH_Admin_Code~pname, scales="free_y") +
                         # air-brushing
                         scale_x_date(breaks = "3 months",
-                                     labels = date_format("%b '%y"),
-                                     limits = as.Date(c('2013-01-01','2015-01-01')))+
+                                     labels = date_format("%b '%y"))+
                         xlab(NULL) + ylab(NULL) + #ylim(0, 1000) +
                         ggtitle("Observed and predicted DHF case counts for all of Thailand")
         }
