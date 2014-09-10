@@ -6,7 +6,7 @@
 #'@param counts_file file containing counts
 #'
 
-make_country_prediction_line_graph <- function(forecasts, counts) {
+make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1) {
                 require(dplyr)
                 require(lubridate)
                 forecasts <- tbl_df(forecasts)
@@ -48,6 +48,6 @@ make_country_prediction_line_graph <- function(forecasts, counts) {
                                                               ymin=predicted_lb, ymax=predicted_ub), 
                                                               alpha=I(.1)) +
                         # air-brushing
-                        xlim(2013, 2015) + xlab(NULL) + ylab(NULL) + ylim(0, max(counts_cntry$cntry_count)*1.5) +
+                        xlim(2013, 2015) + xlab(NULL) + ylab(NULL) + ylim(0, max(counts_cntry$cntry_count)*ylim_scale) +
                         ggtitle("Observed and predicted DHF case counts for all of Thailand")
         }
