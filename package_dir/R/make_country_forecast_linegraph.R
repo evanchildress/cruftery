@@ -24,6 +24,7 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1) 
                         group_by(date_sick_year, date_sick_biweek) %>%
                         summarize(cntry_count = sum(count)) %>%
                         mutate(time = date_sick_year + (date_sick_biweek-1)/26,
+                               date_sick = biweek_to_date(date_sick_biweek, date_sick_year),
                                forecast_biweek = time %in% forecast_times)
                 
 
