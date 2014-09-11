@@ -18,7 +18,7 @@ make_province_prediction_line_graph <- function(forecasts, counts, region=1) {
                 counts <- tbl_df(counts)
                         
                 ## date plotting limits
-                min_plot_date <- as.Date('2012-01-01')
+                min_plot_date <- as.Date('2012-04-01')
                 
                 ## aggregate to country-level
                 forecasts_prov <- forecasts %>% group_by(biweek, year, pid, pname) %>% 
