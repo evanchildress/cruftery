@@ -54,7 +54,7 @@ make_province_prediction_line_graph <- function(forecasts, counts, region=1) {
                                 
                 ## make plot
                 plot_title <- ifelse(region==0,
-                                     paste("Observed and predicted DHF case counts for Bangkok")
+                                     paste("Observed and predicted DHF case counts for Bangkok"),
                                      paste("Observed and predicted DHF case counts for MOPH Region", region))
                 ggplot() + theme_bw() + 
                         theme(legend.position="bottom", #legend.justification=c(1,1),
