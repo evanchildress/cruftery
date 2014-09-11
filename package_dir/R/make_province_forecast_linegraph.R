@@ -53,7 +53,9 @@ make_province_prediction_line_graph <- function(forecasts, counts, region=1) {
                 ## add column in counts_prov indicating which biweeks were left out of the fit
                                 
                 ## make plot
-                plot_title <- paste("Observed and predicted DHF case counts for MOPH Region", region)
+                plot_title <- ifelse(region==0,
+                                     paste("Observed and predicted DHF case counts for Bangkok")
+                                     paste("Observed and predicted DHF case counts for MOPH Region", region))
                 ggplot() + theme_bw() + 
                         theme(legend.position="bottom", #legend.justification=c(1,1),
                               axis.text.x = element_text(angle = 90, hjust = 1, vjust=.5)) +
@@ -62,7 +64,7 @@ make_province_prediction_line_graph <- function(forecasts, counts, region=1) {
                                  aes(x=date_sick, y=prov_count, fill=forecast_biweek), 
                                  stat="identity") + 
                         scale_fill_manual(values=c("black", "gray"),
-                                          name=NULL,
+                                          name="",
                                           labels=c("used by forecast model", "not used by forecast model"))+
                         ## add forecasts
                         geom_line(data=forecasts_prov, aes(x=date_sick, y=predicted_prov_count)) +
