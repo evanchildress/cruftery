@@ -26,7 +26,8 @@ make_province_prediction_line_graph <- function(forecasts, counts, region=1) {
                                   predicted_ub = sum(ub),
                                   predicted_lb = sum(lb)) %>%
                         mutate(time = year + (biweek-1)/26,
-                               date_sick = biweek_to_date(biweek, year))
+                               date_sick = biweek_to_date(biweek, year),
+                               FIPS = pid)
                 forecasts_prov <- left_join(forecasts_prov, thai_prov_data)
                 forecasts_prov <- filter(forecasts_prov, MOPH_Admin_Code == region)
                 
