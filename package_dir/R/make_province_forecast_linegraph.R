@@ -8,10 +8,7 @@ get_forecast_prov_data <- function(forecasts) {
         require(lubridate)
         require(cruftery)
         data(thai_prov_data)
-        forecasts_prov <- forecasts %>% group_by(biweek, year, pid, pname) %>% 
-                summarize(predicted_prov_count = sum(predicted_count),
-                          predicted_ub = sum(ub),
-                          predicted_lb = sum(lb)) %>%
+        forecasts_prov <- forecasts %>% 
                 mutate(time = year + (biweek-1)/26,
                        date_sick = biweek_to_date(biweek, year),
                        FIPS = pid)
@@ -84,10 +81,10 @@ make_province_prediction_line_graph <- function(forecasts_prov,
                                   name="",
                                   labels=c("used by forecast model", "not used by forecast model"))+
                 ## add forecasts
-                geom_line(data=forecasts_prov, aes(x=date_sick, y=predicted_prov_count)) +
-                geom_point(data=forecasts_prov, aes(x=date_sick, y=predicted_prov_count)) +
+                geom_line(data=forecasts_prov, aes(x=date_sick, y=predicted_count)) +
+                geom_point(data=forecasts_prov, aes(x=date_sick, y=predicted_count)) +
                 geom_ribbon(data=forecasts_prov, aes(x=date_sick, 
-                                                     ymin=predicted_lb, ymax=predicted_ub), 
+                                                     ymin=lb, ymax=ub), 
                             alpha=I(.1)) +
                 facet_grid(pname~., scales="free_y") +
                 # air-brushing
