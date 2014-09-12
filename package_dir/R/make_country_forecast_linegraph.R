@@ -35,7 +35,11 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1) 
                 ## make plot
                 ggplot() + theme_bw() + 
                         theme(legend.position=c(1,1), legend.justification=c(1,1),
-                              axis.text.x = element_text(angle = 90, hjust = 1, vjust=.5)) +
+                              axis.text.x = element_text(angle = 90, hjust = 1, vjust=.5),
+                              panel.background = element_rect(fill = "transparent",colour = NA), # or theme_blank()
+                              panel.grid.major =  theme_blank(),
+                              panel.grid.minor =  theme_blank(),
+                              plot.background = element_rect(fill = "transparent",colour = NA)) +
                         ## plot counts
                         geom_bar(data=counts_cntry, 
                                  aes(x=date_sick, y=cntry_count, fill=forecast_biweek), 
