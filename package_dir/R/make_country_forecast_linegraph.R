@@ -6,7 +6,7 @@
 #'@param counts_file file containing counts
 #'
 
-make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1) {
+make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1, min_plot_date=as.Date("2012-04-01")) {
                 require(dplyr)
                 require(lubridate)
                 require(cruftery)
@@ -28,13 +28,14 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1) 
                         summarize(cntry_count = sum(count)) %>%
                         mutate(time = date_sick_year + (date_sick_biweek-1)/26,
                                date_sick = biweek_to_date(date_sick_biweek, date_sick_year),
-                               forecast_biweek = time %in% forecast_times)
+                               forecast_biweek = time %in% forecast_times) %>%
+                        filter(date_sick >= min_plot_date)
 
                 ## add column in counts_cntry indicating which biweeks were left out of the fit
                 
                 ## make plot
                 ggplot() + theme_bw() + 
-                        theme(legend.position=c(1,1), legend.justification=c(1,1),
+                        theme(legend.position="bottom",
                               axis.text.x = element_text(angle = 90, hjust = 1, vjust=.5),
                               panel.background = element_rect(fill = "transparent",colour = NA), # or element_blank()
                               panel.grid.major =  element_blank(),
@@ -54,9 +55,8 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1) 
                                                               ymin=predicted_lb, ymax=predicted_ub), 
                                                               alpha=I(.3)) +
                         # air-brushing
-                        scale_x_date(breaks = "1 month",
-                                     labels = date_format("%d %b %Y"),
-                                     limits = as.Date(c('2013-01-01','2015-01-01')))+
+                        scale_x_date(breaks = "3 months",
+                                     labels = date_format("%d %b %Y"))+
                         xlab(NULL) + ylab(NULL) + 
                         ylim(0, max(counts_cntry$cntry_count)*ylim_scale) +
                         ggtitle("Observed and predicted DHF case counts for all of Thailand")
