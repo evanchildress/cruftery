@@ -52,7 +52,7 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1) 
                         geom_point(data=forecasts_cntry, aes(x=date_sick, y=predicted_cntry_count)) +
                         geom_ribbon(data=forecasts_cntry, aes(x=date_sick, 
                                                               ymin=predicted_lb, ymax=predicted_ub), 
-                                                              alpha=I(.1)) +
+                                                              alpha=I(.3)) +
                         # air-brushing
                         scale_x_date(breaks = "1 month",
                                      labels = date_format("%d %b %Y"),
