@@ -74,8 +74,6 @@ make_province_prediction_line_graph <- function(forecasts_prov,
                 theme(legend.position="bottom", #legend.justification=c(1,1),
                       axis.text.x = element_text(angle = 90, hjust = 1, vjust=.5),
                       panel.background = element_rect(fill = "transparent",colour = NA), # or theme_blank()
-                      panel.grid.minor = element_blank(), 
-                      panel.grid.major = element_blank(),
                       plot.background = element_rect(fill = "transparent",colour = NA)) +
                 ## plot counts
                 geom_bar(data=counts_prov, 
@@ -89,7 +87,7 @@ make_province_prediction_line_graph <- function(forecasts_prov,
                 geom_point(data=forecasts_prov, aes(x=date_sick, y=predicted_count)) +
                 geom_ribbon(data=forecasts_prov, aes(x=date_sick, 
                                                      ymin=lb, ymax=ub), 
-                            alpha=I(.1)) +
+                            alpha=I(.3)) +
                 facet_grid(pname~., scales="free_y") +
                 # air-brushing
                 scale_x_date(breaks = "3 months",
