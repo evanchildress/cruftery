@@ -46,8 +46,8 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1, 
                                  aes(x=date_sick, y=cntry_count, fill=forecast_biweek), 
                                  stat="identity") + 
                         scale_fill_manual(values=c("black", "gray"),
-                                          name="Forecast data",
-                                          labels=c("used", "unused"))+
+                                          name=" ",
+                                          labels=c("used by forecast model", "not used by forecast model"))+
                         ## add forecasts
                         geom_line(data=forecasts_cntry, aes(x=date_sick, y=predicted_cntry_count)) +
                         geom_point(data=forecasts_cntry, aes(x=date_sick, y=predicted_cntry_count)) +
