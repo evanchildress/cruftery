@@ -36,9 +36,9 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1) 
                 ggplot() + theme_bw() + 
                         theme(legend.position=c(1,1), legend.justification=c(1,1),
                               axis.text.x = element_text(angle = 90, hjust = 1, vjust=.5),
-                              panel.background = element_rect(fill = "transparent",colour = NA), # or theme_blank()
-                              panel.grid.major =  theme_blank(),
-                              panel.grid.minor =  theme_blank(),
+                              panel.background = element_rect(fill = "transparent",colour = NA), # or element_blank()
+                              panel.grid.major =  element_blank(),
+                              panel.grid.minor =  element_blank(),
                               plot.background = element_rect(fill = "transparent",colour = NA)) +
                         ## plot counts
                         geom_bar(data=counts_cntry, 
