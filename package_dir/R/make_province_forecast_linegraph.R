@@ -72,7 +72,11 @@ make_province_prediction_line_graph <- function(forecasts_prov,
                              paste("Observed and predicted DHF case counts for MOPH Region", region))
         ggplot() + theme_bw() + 
                 theme(legend.position="bottom", #legend.justification=c(1,1),
-                      axis.text.x = element_text(angle = 90, hjust = 1, vjust=.5)) +
+                      axis.text.x = element_text(angle = 90, hjust = 1, vjust=.5),
+                      panel.background = element_rect(fill = "transparent",colour = NA), # or theme_blank()
+                      panel.grid.minor = element_blank(), 
+                      panel.grid.major = element_blank(),
+                      plot.background = element_rect(fill = "transparent",colour = NA)) +
                 ## plot counts
                 geom_bar(data=counts_prov, 
                          aes(x=date_sick, y=prov_count, fill=forecast_biweek), 
