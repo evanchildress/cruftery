@@ -73,44 +73,49 @@ import_old_case_counts <- function(
 	old_counts[['times']] <- NULL
 	return(old_counts)
 }
-	
-joint_old_new_cases <- function(new_counts, old_counts) {
-	## Joint data:
-	provinces <- unique(new_counts[['province']])
-	
-	new_counts <- split(x=new_counts, f=new_counts[['province']])
-	old_counts <- split(x=old_counts, f=old_counts[['province']])
 
-	new_provinces <- names(new_counts)[!(names(new_counts) %in% names(old_counts))]
-	for ( i in new_provinces ) {
-		old_counts[[i]] <- NA
-	}
-	
-	new_counts <- new_counts[sort(names(new_counts))]
-	old_counts <- old_counts[sort(names(old_counts))]
-	
-	spliced_counts <- mcmapply(
-		FUN = function(new_counts, old_counts) {
-			if (!is.data.frame(old_counts) && is.na(old_counts)) return(new_counts)
-			new_times <- new_counts[['date_sick_year']] + new_counts[['date_sick_biweek']] / 26
-			old_times <- old_counts[['date_sick_year']] + old_counts[['date_sick_biweek']] / 26
-			old_counts <- old_counts[old_times < min(new_times),]
-			spliced_counts <- rbind(new_counts, old_counts)
-			return(spliced_counts)
-		},
-		new_counts = new_counts,
-		old_counts = old_counts,
-		SIMPLIFY=FALSE, mc.cores=getOption("mc.cores",6L)
-	)
-	
-	counts <- do.call(what=rbind, args=spliced_counts)
-	counts <- counts[order(
-		counts[['province']], 
-		counts[['date_sick_year']], 
-		counts[['date_sick_biweek']]
-	),]
-	return(counts)
+##' 
+##' Function for joining old and new case counts. Aggregates biweeks and then
+##' merges...accepting the new data over the old in all cases
+##' 
+##' @param new_counts the new case counts
+##' @param old_counts the new case countes
+##' 
+##' @return an aggregated and merged data.frame
+##' 
+joint_old_new_cases <- function(new_counts, old_counts) {
+  require(dplyr)
+  
+  #aggregate new counts
+  new_counts_ag <- new_counts %>% 
+    group_by(disease, date_sick_biweek, date_sick_year, province) %>%
+    summarize(count=sum(count))
+  
+  
+  #aggregate old counte
+  old_counts_ag <- old_counts %>% 
+    group_by(disease, date_sick_biweek, date_sick_year, province) %>%
+    summarize(count=sum(count))
+  
+  #merge....favoring new counts
+  tmp1<- make.dpyw.uid(new_counts_ag)
+  tmp2<- make.dpyw.uid(old_counts_ag)
+  tmp <-which(!tmp2%in%tmp1)
+  tot_dat <- rbind(new_counts_ag, old_counts_ag[tmp,])
+  
+  return(tot_dat)
 }
+
+##' Utility function for making UIDs based on disease province, biweek and year from data from 
+##' the dengue db. 
+##' 
+##' @param data the data, must have columns disease, province, date_sick_biweek, and date_sick_year
+make.dpyw.uid <- function(data) {
+  uid <- as.numeric(data$disease)*100*10000*100+ as.numeric(data$province)*100*10000+ data$date_sick_year*100 + data$date_sick_biweek
+  return(uid)
+}
+
+
 	
 ## Example: 
 #new_counts <- import_case_counts(link=link)
