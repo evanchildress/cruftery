@@ -36,7 +36,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek, plot_type=c("inciden
                 plot_lims <- range(forecast_data_merged$incidence)
                 plot_lims <- c(floor(log10(plot_lims)[1]),
                                ceiling(log10(plot_lims)[2]))
-                plot_breaks <- seq(plot_lims_logscale[1], plot_lims_logscale[2])
+                plot_breaks <- seq(plot_lims[1], plot_lims[2])
                 plot_midpoint <- mean(plot_lims_logscale)
                 legend_title <- "incidence"
                 plot_labels <- paste0("1e", plot_breaks)
