@@ -45,7 +45,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek, plot_type=c("inciden
                 fill_var <- "outbreak_prob"
                 plot_lims <- c(0,1)
                 plot_midpoint <- .5
-                plot_breaks <- seq(0, 1, by=.1)
+                plot_breaks <- seq(0, 1, by=.2)
                 plot_labels <- plot_breaks
                 legend_title <- "outbreak probability"
         }
