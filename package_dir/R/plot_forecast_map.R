@@ -32,7 +32,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek, plot_type=c("inciden
         
         ## plotting choices based on type
         if(plot_type=="incidence") {
-                fill_var <- log10(incidence)       
+                fill_var <- expression(log10(incidence))
                 plot_lims <- range(forecast_data_merged$incidence)
                 plot_lims <- c(floor(log10(plot_lims)[1]),
                                ceiling(log10(plot_lims)[2]))
@@ -42,7 +42,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek, plot_type=c("inciden
                 plot_labels <- paste0("1e", plot_breaks)
                 
         } else {
-                fill_var <- outbreak_prob
+                fill_var <- expression(outbreak_prob)
                 plot_lims <- c(0,1)
                 plot_midpoint <- .5
                 plot_breaks <- seq(0, 1, by=.1)
@@ -52,7 +52,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek, plot_type=c("inciden
         
         sp_map <- ggplot(subset(forecast_data_merged, biweek=biweek), 
                aes(map_id=pid)) + 
-                geom_map(aes(fill=fill_var), map=thai.locs) + 
+                geom_map(aes(fill=eval(fill_var)), map=thai.locs) + 
                 expand_limits(x = thai.locs$long, y = thai.locs$lat) +
                 scale_fill_gradient2(low = "palegoldenrod", mid="orange", high = "red", 
                                      name=legend_title,
