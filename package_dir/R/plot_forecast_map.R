@@ -47,6 +47,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek, plot_type=c("inciden
                 plot_midpoint <- .5
                 plot_breaks <- seq(0, 1, by=.1)
                 plot_labels <- plot_breaks
+                legend_title <- "outbreak probability"
         }
         
         sp_map <- ggplot(subset(forecast_data_merged, biweek=biweek), 
