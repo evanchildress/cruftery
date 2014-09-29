@@ -65,6 +65,6 @@ plot_forecast_map <- function(forecast_data, cdata, biweek, plot_type=c("inciden
                 theme_bw() +
                 theme(axis.ticks = element_blank(), axis.text = element_blank()) + 
                 xlab("") + ylab("")        
-        print(sp_map)
+        return(sp_map)
         
 }
