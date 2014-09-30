@@ -52,6 +52,8 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                 plot_labels <- plot_breaks
                 legend_title <- "outbreak probability"
         }
+        
+        legend_pos <- ifelse(include_legend, "right", "none")
                 
         sp_map <- ggplot(subset(forecast_data_merged, biweek=biweek), 
                aes(map_id=pid)) + 
@@ -62,14 +64,14 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                                      limits=plot_lims, 
                                      midpoint=plot_midpoint, 
                                      breaks=plot_breaks,
-                                     labels=plot_labels,
-                                     guide=include_legend) +
+                                     labels=plot_labels) +
                 #scale_fill_gradient2(low = "palegoldenrod", mid="orange", high = "red", 
                 #                     limits=c(0, 1), midpoint=.5, name="outbreak probability") +
                 theme_bw() +
                 theme(axis.ticks = element_blank(), 
                       axis.text = element_blank(),
-                      panel.background = element_rect(fill = "transparent",colour = NA)) + # or element_blank()
+                      panel.background = element_rect(fill = "transparent",colour = NA)
+                      legend.position = legend_pos) + # or element_blank()
                 xlab("") + ylab("")        
         print(sp_map)
         
