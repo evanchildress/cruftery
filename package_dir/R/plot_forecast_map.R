@@ -63,8 +63,9 @@ plot_forecast_map <- function(forecast_data, cdata, biweek, plot_type=c("inciden
                 #scale_fill_gradient2(low = "palegoldenrod", mid="orange", high = "red", 
                 #                     limits=c(0, 1), midpoint=.5, name="outbreak probability") +
                 theme_bw() +
-                theme(axis.ticks = element_blank(), axis.text = element_blank()) + 
+                theme(axis.ticks = element_blank(), axis.text = element_blank(),
+                      panel.background = element_rect(fill = "transparent",colour = NA)) + # or element_blank()
                 xlab("") + ylab("")        
-        return(sp_map)
+        print(sp_map)
         
 }
