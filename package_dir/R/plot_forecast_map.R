@@ -5,9 +5,11 @@
 #'@param forecast_data forecast file dataframe
 #'@param cdata cntry.data object with spatial polygons needed for plotting
 #'@param biweek biweek to plot
+#'@param include_legend logical, whether to include legend
 #'@param plot_type one of either "incidence" or "outbreak"
 
 plot_forecast_map <- function(forecast_data, cdata, biweek, 
+                              include_legend=TRUE,
                               plot_type=c("incidence", "outbreak")) {
         require(ggplot2)
         
@@ -60,7 +62,8 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                                      limits=plot_lims, 
                                      midpoint=plot_midpoint, 
                                      breaks=plot_breaks,
-                                     labels=plot_labels) +
+                                     labels=plot_labels,
+                                     guide=include_legend) +
                 #scale_fill_gradient2(low = "palegoldenrod", mid="orange", high = "red", 
                 #                     limits=c(0, 1), midpoint=.5, name="outbreak probability") +
                 theme_bw() +
