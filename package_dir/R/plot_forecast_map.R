@@ -8,7 +8,6 @@
 #'@param plot_type one of either "incidence" or "outbreak"
 
 plot_forecast_map <- function(forecast_data, cdata, biweek, 
-                              include_legend=TRUE,
                               plot_type=c("incidence", "outbreak")) {
         require(ggplot2)
         
@@ -51,9 +50,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                 plot_labels <- plot_breaks
                 legend_title <- "outbreak probability"
         }
-        
-        legend_pos <- ifelse(include_legend, "right", "none")
-        
+                
         sp_map <- ggplot(subset(forecast_data_merged, biweek=biweek), 
                aes(map_id=pid)) + 
                 geom_map(aes_string(fill=fill_var), map=thai.locs) + 
@@ -69,8 +66,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                 theme_bw() +
                 theme(axis.ticks = element_blank(), 
                       axis.text = element_blank(),
-                      panel.background = element_rect(fill = "transparent",colour = NA),
-                      legend.position=legend_pos) + # or element_blank()
+                      panel.background = element_rect(fill = "transparent",colour = NA)) + # or element_blank()
                 xlab("") + ylab("")        
         print(sp_map)
         
