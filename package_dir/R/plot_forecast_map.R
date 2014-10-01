@@ -80,7 +80,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                       panel.background = element_rect(fill = "transparent",colour = NA),
                       legend.position = legend_pos) + # or element_blank()
                 coord_map(projection="mercator") + ## to keep scaling right
-                annotate("text", x = 103.5, y = 20.1, label = map_date, size=1.5) +
+                annotate("text", x = 103.5, y = 20.1, label = map_date, size=18) +
                 xlab("") + ylab("")        
         print(sp_map)
         
