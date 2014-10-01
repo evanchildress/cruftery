@@ -13,6 +13,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                               plot_type=c("incidence", "outbreak")) {
         require(ggplot2)
         require(dplyr)
+        require(mapproj)
         
         data(thai_prov_data)
         
