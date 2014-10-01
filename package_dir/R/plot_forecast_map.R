@@ -12,6 +12,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                               include_legend=TRUE,
                               plot_type=c("incidence", "outbreak")) {
         require(ggplot2)
+        require(dplyr)
         
         data(thai_prov_data)
         
@@ -32,6 +33,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
         ## ASSUMES THAT loc.data HAS "ID_1" AND "FIPS_ADMIN" COLUMNS
         ## required to have "region" as this column name!
         thai.locs$region <- loc.data[match(thai.locs$id, loc.data$ID_1), "FIPS_ADMIN"]
+        thai.locs <- thai.locs %>% group_by(group) %>% sample_frac(size=.5) 
         
         ## plotting choices based on type
         if(plot_type=="incidence") {
@@ -72,6 +74,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                       axis.text = element_blank(),
                       panel.background = element_rect(fill = "transparent",colour = NA),
                       legend.position = legend_pos) + # or element_blank()
+                coord_map(projection="mercator") + ## to keep scaling right
                 xlab("") + ylab("")        
         print(sp_map)
         
