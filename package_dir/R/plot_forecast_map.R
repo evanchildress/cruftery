@@ -56,10 +56,14 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                 legend_title <- "outbreak probability"
         }
         
+        ## set legend position, if any
         legend_pos <- ifelse(include_legend, "right", "none")
                 
-        sp_map <- ggplot(subset(forecast_data_merged, biweek=biweek), 
-               aes(map_id=pid)) + 
+        ## text for map label
+        forecast_data_subset <- subset(forecast_data_merged, biweek=biweek)
+        map_date <- format(as.Date(biweek_to_date(biweek, forecast_data_subset$year[1])), "%d %b %Y")
+        
+        sp_map <- ggplot(forecast_data_subset, aes(map_id=pid)) + 
                 geom_map(aes_string(fill=fill_var), map=thai.locs) + 
                 expand_limits(x = thai.locs$long, y = thai.locs$lat) +
                 scale_fill_gradient2(low = "palegoldenrod", mid="orange", high = "red", 
@@ -76,6 +80,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                       panel.background = element_rect(fill = "transparent",colour = NA),
                       legend.position = legend_pos) + # or element_blank()
                 coord_map(projection="mercator") + ## to keep scaling right
+                annotate("text", x = 19.768829, y = 101.698844, label = map_date) +
                 xlab("") + ylab("")        
         print(sp_map)
         
