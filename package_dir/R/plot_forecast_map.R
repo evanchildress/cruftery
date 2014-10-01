@@ -34,7 +34,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
         ## ASSUMES THAT loc.data HAS "ID_1" AND "FIPS_ADMIN" COLUMNS
         ## required to have "region" as this column name!
         thai.locs$region <- loc.data[match(thai.locs$id, loc.data$ID_1), "FIPS_ADMIN"]
-        thai.locs <- thai.locs %>% group_by(group) %>% sample_frac(size=.5) 
+        #thai.locs <- thai.locs %>% group_by(group) %>% sample_frac(size=.5) 
         
         ## plotting choices based on type
         if(plot_type=="incidence") {
