@@ -25,13 +25,13 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                                        incidence = predicted_count/Population)
                 
         ## retrieve location info
-        thai.locs <- fortify(cdata@loc.info)
-        loc.data <- cdata@loc.info@data
+        thai_locs <- fortify(cdata@loc.info)
+        loc_data <- cdata@loc.info@data
         
-        ## match thai.locs to a FIPS
-        ## ASSUMES THAT loc.data HAS "ID_1" AND "FIPS_ADMIN" COLUMNS
+        ## match thai_locs to a FIPS
+        ## ASSUMES THAT loc_data HAS "ID_1" AND "FIPS_ADMIN" COLUMNS
         ## required to have "region" as this column name!
-        thai.locs$region <- loc.data[match(thai.locs$id, loc.data$ID_1), "FIPS_ADMIN"]
+        thai_locs$region <- loc_data[match(thai_locs$id, loc_data$ID_1), "FIPS_ADMIN"]
         
         ## plotting choices based on type
         if(plot_type=="incidence") {
@@ -57,8 +57,8 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                 
         sp_map <- ggplot(subset(forecast_data_merged, biweek=biweek), 
                aes(map_id=pid)) + 
-                geom_map(aes_string(fill=fill_var), map=thai.locs) + 
-                expand_limits(x = thai.locs$long, y = thai.locs$lat) +
+                geom_map(aes_string(fill=fill_var), map=thai_locs) + 
+                expand_limits(x = thai_locs$long, y = thai_locs$lat) +
                 scale_fill_gradient2(low = "palegoldenrod", mid="orange", high = "red", 
                                      name=legend_title,
                                      limits=plot_lims, 
