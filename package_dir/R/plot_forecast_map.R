@@ -4,11 +4,11 @@
 
 #'@param forecast_data forecast file dataframe
 #'@param cdata cntry.data object with spatial polygons needed for plotting
-#'@param biweek biweek to plot
+#'@param biweek_to_plot biweek to plot
 #'@param include_legend logical, whether to include legend
 #'@param plot_type one of either "incidence" or "outbreak"
 
-plot_forecast_map <- function(forecast_data, cdata, biweek, 
+plot_forecast_map <- function(forecast_data, cdata, biweek_to_plot, 
                               include_legend=TRUE,
                               plot_type=c("incidence", "outbreak")) {
         require(ggplot2)
@@ -18,7 +18,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
         
         data(thai_prov_data)
         
-        if(!(biweek %in% unique(forecasts$biweek)))
+        if(!(biweek_to_plot %in% unique(forecasts$biweek)))
                 stop("biweek must be in forecast_data.")
         
         ## merge thai_prov_data with forecasts to get population
@@ -66,7 +66,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
         legend_pos <- ifelse(include_legend, "right", "none")
                 
         ## text for map label
-        forecast_data_subset <- subset(forecast_data_merged, biweek=biweek)
+        forecast_data_subset <- subset(forecast_data_merged, biweek == biweek_to_plot)
         map_date <- format(as.Date(biweek_to_date(biweek, forecast_data_subset$year[1])), "%d %b %Y")
         
         ## merge forecast data with data_to_plot
