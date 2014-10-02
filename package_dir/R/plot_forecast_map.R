@@ -13,6 +13,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                               plot_type=c("incidence", "outbreak")) {
         require(ggplot2)
         require(dplyr)
+        require(rgeos)
         require(mapproj)
         
         data(thai_prov_data)
@@ -27,7 +28,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
                                        incidence = predicted_count/Population)
                 
         ## retrieve location info
-        thai_locs <- fortify(cdata@loc.info)
+        thai_locs <- fortify(cdata@loc.info, region="ID_1")
         loc_data <- cdata@loc.info@data
         
         ## match thai_locs to a FIPS
@@ -58,12 +59,6 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
         ## set legend position, if any
         legend_pos <- ifelse(include_legend, "right", "none")
                 
-<<<<<<< HEAD
-        sp_map <- ggplot(subset(forecast_data_merged, biweek=biweek), 
-               aes(map_id=pid)) + 
-                geom_map(aes_string(fill=fill_var), map=thai_locs) + 
-                expand_limits(x = thai_locs$long, y = thai_locs$lat) +
-=======
         ## text for map label
         forecast_data_subset <- subset(forecast_data_merged, biweek=biweek)
         map_date <- format(as.Date(biweek_to_date(biweek, forecast_data_subset$year[1])), "%d %b %Y")
@@ -71,7 +66,6 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
         sp_map <- ggplot(forecast_data_subset, aes(map_id=pid)) + 
                 geom_map(aes_string(fill=fill_var), map=thai.locs) + 
                 expand_limits(x = thai.locs$long, y = thai.locs$lat) +
->>>>>>> 62fbde16bcfe5252930d03438fdf048c3bd0f123
                 scale_fill_gradient2(low = "palegoldenrod", mid="orange", high = "red", 
                                      name=legend_title,
                                      limits=plot_lims, 
