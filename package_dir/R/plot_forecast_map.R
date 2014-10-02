@@ -67,7 +67,7 @@ plot_forecast_map <- function(forecast_data, cdata, biweek_to_plot,
                 
         ## text for map label
         forecast_data_subset <- subset(forecast_data_merged, biweek == biweek_to_plot)
-        map_date <- format(as.Date(biweek_to_date(biweek, forecast_data_subset$year[1])), "%d %b %Y")
+        map_date <- format(as.Date(biweek_to_date(biweek_to_plot, forecast_data_subset$year[1])), "%d %b %Y")
         
         ## merge forecast data with data_to_plot
         data_to_plot <- left_join(data_to_plot, forecast_data_subset)
