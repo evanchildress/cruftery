@@ -27,15 +27,21 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
         forecast_data_merged <- mutate(forecast_data_merged,
                                        incidence = predicted_count/Population)
                 
-        ## retrieve location info
+        ## foritfy polygon info
         thai_locs <- fortify(cdata@loc.info, region="ID_1")
-        loc_data <- cdata@loc.info@data
+        thai_locs[['region']] <- thai_locs[['id']]
         
-        ## match thai_locs to a FIPS
-        ## ASSUMES THAT loc_data HAS "ID_1" AND "FIPS_ADMIN" COLUMNS
-        ## required to have "region" as this column name!
-        thai_locs$region <- loc_data[match(thai_locs$id, loc_data$ID_1), "FIPS_ADMIN"]
+        ## store loc.info@data
+        loc_info <- cdata@loc.info@data
         
+        ## combine polygon info with thai data
+        thai_prov_data <- mutate(thai_prov_data, FIPS_ADMIN = FIPS) ## create common column name
+        loc_info <- select(loc_info, -ISO) ## create common column name
+        data_to_plot <- left_join(loc_info, thai_prov_data) %>%
+                mutate(id = ID_1,
+                       pid = as.character(FIPS))
+        
+      
         ## plotting choices based on type
         if(plot_type=="incidence") {
                 fill_var <- "log10(incidence)"
@@ -63,9 +69,12 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
         forecast_data_subset <- subset(forecast_data_merged, biweek=biweek)
         map_date <- format(as.Date(biweek_to_date(biweek, forecast_data_subset$year[1])), "%d %b %Y")
         
-        sp_map <- ggplot(forecast_data_subset, aes(map_id=pid)) + 
-                geom_map(aes_string(fill=fill_var), map=thai.locs) + 
-                expand_limits(x = thai.locs$long, y = thai.locs$lat) +
+        ## merge forecast data with data_to_plot
+        data_to_plot <- left_join(data_to_plot, forecast_data_subset)
+        
+        sp_map <- ggplot(data_to_plot, aes(map_id=id)) + 
+                geom_map(aes_string(fill=fill_var), map=thai_locs) + 
+                expand_limits(x = thai_locs$long, y = thai_locs$lat) +
                 scale_fill_gradient2(low = "palegoldenrod", mid="orange", high = "red", 
                                      name=legend_title,
                                      limits=plot_lims, 
