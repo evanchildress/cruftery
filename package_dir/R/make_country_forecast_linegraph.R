@@ -41,19 +41,7 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1, 
                               panel.grid.major =  element_blank(),
                               panel.grid.minor =  element_blank(),
                               plot.background = element_rect(fill = "transparent",colour = NA)) +
-                        ## add forecasts
-                        geom_line(data=forecasts_cntry, aes(x=date_sick, y=predicted_cntry_count)) +
-                        geom_point(data=forecasts_cntry, aes(x=date_sick, y=predicted_cntry_count)) +
-                        geom_ribbon(data=forecasts_cntry, aes(x=date_sick, 
-                                                              ymin=predicted_lb, ymax=predicted_ub), 
-                                                              alpha=I(.3)) +
-                        # air-brushing
-                        scale_x_date(breaks = "3 months",
-                                     labels = date_format("%d %b %Y"))+
-                        xlab(NULL) + ylab(NULL) + 
-                        ylim(0, max(counts_cntry$cntry_count)*ylim_scale) +
-                        ggtitle("Observed and predicted DHF case counts for all of Thailand")
-                
+               
                 if(show_unused_cases){
                         ## using gray bars for unused cases
                         p <- p + geom_bar(data=counts_cntry, 
@@ -68,5 +56,21 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1, 
                                           aes(x=date_sick, y=cntry_count), 
                                           stat="identity")
                 }
+                p <- p +  
+                        ## add forecasts
+                        geom_line(data=forecasts_cntry, 
+                                  aes(x=date_sick, y=predicted_cntry_count)) +
+                        geom_point(data=forecasts_cntry, 
+                                   aes(x=date_sick, y=predicted_cntry_count)) +
+                        geom_ribbon(data=forecasts_cntry, 
+                                    aes(x=date_sick, ymin=predicted_lb, ymax=predicted_ub), 
+                                    alpha=I(.3)) +
+                        # air-brushing
+                        scale_x_date(breaks = "3 months",
+                                     labels = date_format("%d %b %Y"))+
+                        xlab(NULL) + ylab(NULL) + 
+                        ylim(0, max(counts_cntry$cntry_count)*ylim_scale) +
+                        ggtitle("Observed and predicted DHF case counts for all of Thailand")
                 p
+                
         }
