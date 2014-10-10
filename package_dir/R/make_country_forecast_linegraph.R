@@ -6,7 +6,7 @@
 #'@param counts_file file containing counts
 #'
 
-make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1, min_plot_date=as.Date("2012-04-01"), ) {
+make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1, min_plot_date=as.Date("2012-04-01"), show_unused_counts=TRUE) {
                 require(dplyr)
                 require(lubridate)
                 require(cruftery)
