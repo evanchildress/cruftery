@@ -57,7 +57,7 @@ get_count_prov_data <- function(counts, forecasts_prov, min_plot_date=as.Date('2
 make_province_prediction_line_graph <- function(forecasts_prov, 
                                                 counts_prov, 
                                                 region=1,
-                                                show_unused_cases=TRUE) {
+                                                show_unused_counts=TRUE) {
         require(dplyr)
         require(lubridate)
         require(cruftery)
@@ -93,7 +93,7 @@ make_province_prediction_line_graph <- function(forecasts_prov,
                              labels = date_format("%d %b %Y"))+
                 xlab(NULL) + ylab(NULL) + #ylim(0, 1000) +
                 ggtitle(plot_title)
-        if(show_unused_cases){
+        if(show_unused_counts){
                 ## using gray bars for unused cases
                 p <- p + geom_bar(data=counts_prov, 
                                  aes(x=date_sick, y=prov_count, fill=forecast_biweek), 
