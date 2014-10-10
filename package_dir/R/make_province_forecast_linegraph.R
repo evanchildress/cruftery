@@ -43,7 +43,7 @@ get_count_prov_data <- function(counts, forecasts_prov, min_plot_date=as.Date('2
         thai_prov_data <- mutate(thai_prov_data, 
                                  province=ISO,
                                  pid=FIPS,
-                                 pname=Province)
+                                 pname=reorder(Province, Population, FUN=mean))
         counts_prov <- left_join(counts_prov, thai_prov_data)
         
         return(counts_prov)
