@@ -66,14 +66,12 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
         sp_map <- ggplot(forecast_data_subset, aes(map_id=pid)) + 
                 geom_map(aes_string(fill=fill_var), map=thai.locs) + 
                 expand_limits(x = thai.locs$long, y = thai.locs$lat) +
-                scale_fill_gradient2(low = "palegoldenrod", mid="orange", high = "red", 
+                scale_fill_gradient2(low = "green", mid="yellow", high = "red", 
                                      name=legend_title,
                                      limits=plot_lims, 
                                      midpoint=plot_midpoint, 
                                      breaks=plot_breaks,
                                      labels=plot_labels) +
-                #scale_fill_gradient2(low = "palegoldenrod", mid="orange", high = "red", 
-                #                     limits=c(0, 1), midpoint=.5, name="outbreak probability") +
                 theme_bw() +
                 theme(axis.ticks = element_blank(), 
                       axis.text = element_blank(),
