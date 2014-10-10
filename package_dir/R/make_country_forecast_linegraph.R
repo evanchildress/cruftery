@@ -40,7 +40,7 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1, 
                               panel.background = element_rect(fill = "transparent",colour = NA), # or element_blank()
                               panel.grid.major =  element_blank(),
                               panel.grid.minor =  element_blank(),
-                              plot.background = element_rect(fill = "transparent",colour = NA)) +
+                              plot.background = element_rect(fill = "transparent",colour = NA)) 
                
                 if(show_unused_counts){
                         ## using gray bars for unused cases
