@@ -87,7 +87,7 @@ make_province_prediction_line_graph <- function(forecasts_prov,
                 geom_ribbon(data=forecasts_prov, aes(x=date_sick, 
                                                      ymin=lb, ymax=ub), 
                             alpha=I(.3)) +
-                facet_grid(pname~., scales="free_y") +
+                facet_grid(pname~.) +
                 # air-brushing
                 scale_x_date(breaks = "3 months",
                              labels = date_format("%d %b %Y"))+
