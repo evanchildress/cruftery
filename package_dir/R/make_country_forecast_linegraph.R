@@ -6,7 +6,7 @@
 #'@param counts_file file containing counts
 #'
 
-make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1, min_plot_date=as.Date("2012-04-01")) {
+make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1, min_plot_date=as.Date("2012-04-01"), ) {
                 require(dplyr)
                 require(lubridate)
                 require(cruftery)
@@ -34,20 +34,13 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1, 
                 ## add column in counts_cntry indicating which biweeks were left out of the fit
                 
                 ## make plot
-                ggplot() + theme_bw() + 
+                p <- ggplot() + theme_bw() + 
                         theme(legend.position="bottom",
                               axis.text.x = element_text(angle = 90, hjust = 1, vjust=.5),
                               panel.background = element_rect(fill = "transparent",colour = NA), # or element_blank()
                               panel.grid.major =  element_blank(),
                               panel.grid.minor =  element_blank(),
                               plot.background = element_rect(fill = "transparent",colour = NA)) +
-                        ## plot counts
-                        geom_bar(data=counts_cntry, 
-                                 aes(x=date_sick, y=cntry_count, fill=forecast_biweek), 
-                                 stat="identity") + 
-                        scale_fill_manual(values=c("black", "gray"),
-                                          name=" ",
-                                          labels=c("used by forecast model", "not used by forecast model"))+
                         ## add forecasts
                         geom_line(data=forecasts_cntry, aes(x=date_sick, y=predicted_cntry_count)) +
                         geom_point(data=forecasts_cntry, aes(x=date_sick, y=predicted_cntry_count)) +
@@ -60,4 +53,20 @@ make_country_prediction_line_graph <- function(forecasts, counts, ylim_scale=1, 
                         xlab(NULL) + ylab(NULL) + 
                         ylim(0, max(counts_cntry$cntry_count)*ylim_scale) +
                         ggtitle("Observed and predicted DHF case counts for all of Thailand")
+                
+                if(show_unused_cases){
+                        ## using gray bars for unused cases
+                        p <- p + geom_bar(data=counts_cntry, 
+                                          aes(x=date_sick, y=cntry_count, fill=forecast_biweek), 
+                                          stat="identity") + 
+                                scale_fill_manual(values=c("black", "gray"),
+                                                  name="",
+                                                  labels=c("used by forecast model", "not used by forecast model"))
+                } else {
+                        ## no unused cases
+                        p <- p + geom_bar(data=filter(counts_cntry, forecast_biweek==FALSE), 
+                                          aes(x=date_sick, y=cntry_count), 
+                                          stat="identity")
+                }
+                p
         }

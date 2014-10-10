@@ -107,5 +107,6 @@ make_province_prediction_line_graph <- function(forecasts_prov,
                                  aes(x=date_sick, y=prov_count), 
                                  stat="identity")
         }
+        p
                         
 }
