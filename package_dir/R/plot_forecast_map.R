@@ -4,20 +4,21 @@
 
 #'@param forecast_data forecast file dataframe
 #'@param cdata cntry.data object with spatial polygons needed for plotting
-#'@param biweek biweek to plot
+#'@param biweek_to_plot biweek to plot
 #'@param include_legend logical, whether to include legend
 #'@param plot_type one of either "incidence" or "outbreak"
 
-plot_forecast_map <- function(forecast_data, cdata, biweek, 
+plot_forecast_map <- function(forecast_data, cdata, biweek_to_plot, 
                               include_legend=TRUE,
                               plot_type=c("incidence", "outbreak")) {
         require(ggplot2)
         require(dplyr)
+        require(rgeos)
         require(mapproj)
         
         data(thai_prov_data)
         
-        if(!(biweek %in% unique(forecasts$biweek)))
+        if(!(biweek_to_plot %in% unique(forecasts$biweek)))
                 stop("biweek must be in forecast_data.")
         
         ## merge thai_prov_data with forecasts to get population
@@ -26,16 +27,21 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
         forecast_data_merged <- mutate(forecast_data_merged,
                                        incidence = predicted_count/Population)
                 
-        ## retrieve location info
-        thai.locs <- fortify(cdata@loc.info)
-        loc.data <- cdata@loc.info@data
+        ## foritfy polygon info
+        thai_locs <- fortify(cdata@loc.info, region="ID_1")
+        thai_locs[['region']] <- thai_locs[['id']]
         
-        ## match thai.locs to a FIPS
-        ## ASSUMES THAT loc.data HAS "ID_1" AND "FIPS_ADMIN" COLUMNS
-        ## required to have "region" as this column name!
-        thai.locs$region <- loc.data[match(thai.locs$id, loc.data$ID_1), "FIPS_ADMIN"]
-        #thai.locs <- thai.locs %>% group_by(group) %>% sample_frac(size=.5) 
+        ## store loc.info@data
+        loc_info <- cdata@loc.info@data
         
+        ## combine polygon info with thai data
+        thai_prov_data <- mutate(thai_prov_data, FIPS_ADMIN = FIPS) ## create common column name
+        loc_info <- select(loc_info, -ISO) ## create common column name
+        data_to_plot <- left_join(loc_info, thai_prov_data) %>%
+                mutate(id = ID_1,
+                       pid = as.character(FIPS))
+        
+      
         ## plotting choices based on type
         if(plot_type=="incidence") {
                 fill_var <- "log10(incidence)"
@@ -60,12 +66,15 @@ plot_forecast_map <- function(forecast_data, cdata, biweek,
         legend_pos <- ifelse(include_legend, "right", "none")
                 
         ## text for map label
-        forecast_data_subset <- subset(forecast_data_merged, biweek=biweek)
-        map_date <- format(as.Date(biweek_to_date(biweek, forecast_data_subset$year[1])), "%d %b %Y")
+        forecast_data_subset <- subset(forecast_data_merged, biweek == biweek_to_plot)
+        map_date <- format(as.Date(biweek_to_date(biweek_to_plot, forecast_data_subset$year[1])), "%d %b %Y")
         
-        sp_map <- ggplot(forecast_data_subset, aes(map_id=pid)) + 
-                geom_map(aes_string(fill=fill_var), map=thai.locs) + 
-                expand_limits(x = thai.locs$long, y = thai.locs$lat) +
+        ## merge forecast data with data_to_plot
+        data_to_plot <- left_join(data_to_plot, forecast_data_subset)
+        
+        sp_map <- ggplot(data_to_plot, aes(map_id=id)) + 
+                geom_map(aes_string(fill=fill_var), map=thai_locs) + 
+                expand_limits(x = thai_locs$long, y = thai_locs$lat) +
                 scale_fill_gradient2(low = "green", mid="yellow", high = "red", 
                                      name=legend_title,
                                      limits=plot_lims, 
