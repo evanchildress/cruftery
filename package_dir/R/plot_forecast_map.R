@@ -75,7 +75,8 @@ plot_forecast_map <- function(forecast_data, cdata, biweek_to_plot,
         sp_map <- ggplot(data_to_plot, aes(map_id=id)) + 
                 geom_map(aes_string(fill=fill_var), map=thai_locs) + 
                 expand_limits(x = thai_locs$long, y = thai_locs$lat) +
-                scale_fill_gradient2(low = "green", mid="yellow", high = "red", 
+                ## use color blind friendly colors
+                scale_fill_gradient2(low = "#009E73", mid="#F0E442", high = "#D55E00", 
                                      name=legend_title,
                                      limits=plot_lims, 
                                      midpoint=plot_midpoint, 
