@@ -17,6 +17,10 @@ plot_forecast_map <- function(forecast_data, cdata, biweek_to_plot,
         require(mapproj)
         
         data(thai_prov_data)
+
+        ## adjust for end of year biweeks
+        if(biweek_to_plot>26)
+                biweek_to_plot <- biweek_to_plot - 26
         
         if(!(biweek_to_plot %in% unique(forecasts$biweek)))
                 stop("biweek must be in forecast_data.")
